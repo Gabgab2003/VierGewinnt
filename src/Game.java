@@ -1,10 +1,9 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
-public class Game implements ActionListener {
+public class Game extends KeyAdapter implements ActionListener, KeyListener {
     private Team team = Team.ONE;
     private VierGewinnt vierGewinnt = new VierGewinnt();
     private ImageIcon red = new ImageIcon(this.getClass().getResource("assets/RED.png"));
@@ -18,9 +17,6 @@ public class Game implements ActionListener {
     private JLabel[][] fields;
     private JLabel bottomText;
     private JButton[] col_buttons;
-    private JPanel board;
-
-    private ActionListener actionListener;
 
     private void switchTeam() {
         switch(team) {
@@ -58,7 +54,22 @@ public class Game implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent actionEvent) {
-        int num = Integer.parseInt(actionEvent.getActionCommand())-1;
+        place(Integer.parseInt(actionEvent.getActionCommand())-1);
+    }
+
+    public void keyPressed(KeyEvent e) {
+    }
+    public void keyReleased(KeyEvent e) {
+        int num = Integer.parseInt(Character.toString(e.getKeyChar()))-1;
+        col_buttons[num].doClick(111);
+    }
+
+    public void keyTyped(KeyEvent e) {}
+
+    private void place(int num) {
+        if(!(num>=0 && num<=7)) {
+            return;
+        }
         int pl = vierGewinnt.place(num, team);
         if(pl != -1) {
             switch(team) {
@@ -102,8 +113,10 @@ public class Game implements ActionListener {
     public void initGui() {
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLayout(new BorderLayout());
+        jFrame.addKeyListener(this);
+        jFrame.setFocusable(true);
 
-        board = new JPanel();
+        JPanel board = new JPanel();
         board.setPreferredSize(new Dimension(500,300));
         board.setLayout(new GridLayout(rows, cols, 2,2));
         fields = new JLabel[rows][cols];
