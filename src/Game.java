@@ -61,15 +61,14 @@ public class Game extends KeyAdapter implements ActionListener, KeyListener {
     }
     public void keyReleased(KeyEvent e) {
         int num = Integer.parseInt(Character.toString(e.getKeyChar()))-1;
-        col_buttons[num].doClick(111);
+        if(num>=0&&num<=6) {
+            col_buttons[num].doClick(111);
+        }
     }
 
     public void keyTyped(KeyEvent e) {}
 
     private void place(int num) {
-        if(!(num>=0 && num<=7)) {
-            return;
-        }
         int pl = vierGewinnt.place(num, team);
         if(pl != -1) {
             switch(team) {
@@ -117,6 +116,7 @@ public class Game extends KeyAdapter implements ActionListener, KeyListener {
         jFrame.setFocusable(true);
 
         JPanel board = new JPanel();
+        board.addKeyListener(this);
         board.setPreferredSize(new Dimension(500,300));
         board.setLayout(new GridLayout(rows, cols, 2,2));
         fields = new JLabel[rows][cols];
@@ -130,18 +130,21 @@ public class Game extends KeyAdapter implements ActionListener, KeyListener {
         board.setVisible(true);
 
         JPanel buttonRow = new JPanel();
+        buttonRow.addKeyListener(this);
         buttonRow.setPreferredSize(new Dimension(500,25));
         buttonRow.setLayout(new GridLayout(1, cols, 2, 0));
         col_buttons = new JButton[cols];
         for(int i=0;i<cols;i++) {
             col_buttons[i] = new JButton(""+(i+1));
             col_buttons[i].addActionListener(this);
+            col_buttons[i].addKeyListener(this);
             buttonRow.add(col_buttons[i]);
         }
         buttonRow.setVisible(true);
 
         bottomText = new JLabel("Red's turn", SwingConstants.CENTER);
         bottomText.setPreferredSize(new Dimension(500,25));
+        bottomText.setFocusable(false);
 
         jFrame.add(buttonRow, BorderLayout.NORTH);
         jFrame.add(board, BorderLayout.CENTER);
