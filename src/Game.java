@@ -10,10 +10,15 @@ public class Game implements ActionListener {
     private ImageIcon red = new ImageIcon(this.getClass().getResource("assets/RED.png"));
     private ImageIcon blue = new ImageIcon(this.getClass().getResource("assets/BLUE.png"));
 
+
+    private int cols = 7;
+    private int rows = 5;
+
     private JFrame jFrame = new JFrame();
     private JLabel[][] fields;
     private JLabel bottomText;
     private JButton[] col_buttons;
+    private JPanel board;
 
     private ActionListener actionListener;
 
@@ -25,6 +30,30 @@ public class Game implements ActionListener {
             case TWO:
                 team=Team.ONE;
                 break;
+        }
+    }
+
+    private void resetDialog() {
+        int resp = JOptionPane.showConfirmDialog(jFrame, "Do you want to play another round?", "Another round?", JOptionPane.YES_NO_OPTION);
+        if(resp==0) {
+            resetBoard();
+        } else {
+            System.exit(0);
+        }
+    }
+
+    private void resetBoard() {
+        vierGewinnt = new VierGewinnt();
+        bottomText.setText("Red's turn");
+        team = Team.TWO;
+
+        for(int r=0;r<rows;r++) {
+            for(int c=0;c<cols;c++) {
+                fields[r][c].setIcon(new ImageIcon());
+            }
+        }
+        for(int i=0;i<7;i++) {
+            col_buttons[i].setEnabled(true);
         }
     }
 
@@ -46,13 +75,17 @@ public class Game implements ActionListener {
                 }
                 switch(team) {
                     case ONE:
-                        bottomText.setText("Red wins!");
+                        JOptionPane.showConfirmDialog(jFrame, "Red wins!", "Winner", JOptionPane.DEFAULT_OPTION);
                         break;
                     case TWO:
-                        bottomText.setText("Blue wins!");
+                        JOptionPane.showConfirmDialog(jFrame, "Blue wins!", "Winner", JOptionPane.DEFAULT_OPTION);
                         break;
                 }
-            } else {
+                resetDialog();
+            } else if(vierGewinnt.isDraw()) {
+                JOptionPane.showConfirmDialog(jFrame, "It's a draw!", "Draw", JOptionPane.DEFAULT_OPTION);
+                resetDialog();
+            }  else {
                 switch(team) {
                     case ONE:
                         bottomText.setText("Blue's turn");
@@ -67,12 +100,10 @@ public class Game implements ActionListener {
     }
 
     public void initGui() {
-        int cols = 7;
-        int rows = 5;
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLayout(new BorderLayout());
 
-        JPanel board = new JPanel();
+        board = new JPanel();
         board.setPreferredSize(new Dimension(500,300));
         board.setLayout(new GridLayout(rows, cols, 2,2));
         fields = new JLabel[rows][cols];

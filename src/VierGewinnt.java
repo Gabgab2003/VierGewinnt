@@ -2,9 +2,17 @@ public class VierGewinnt {
     private int columns = 7;
     private int rows = 5;
     private Team[][] board;
+    private int count=columns*rows;
 
     VierGewinnt() {
         board = new Team[columns][rows];
+    }
+
+    public boolean isDraw() {
+        if(count<=0) {
+            return true;
+        }
+        return false;
     }
 
     public int place(int col, Team team) {
@@ -13,11 +21,13 @@ public class VierGewinnt {
         }
         if(board[col][rows-1]==null) {
             board[col][rows-1] = team;
+            count--;
             return rows-1;
         }
         for (int i=1;i<rows;i++) {
             if(board[col][i]!=null) {
                 board[col][i-1] = team;
+                count--;
                 return i-1;
             }
         }
