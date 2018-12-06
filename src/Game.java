@@ -3,7 +3,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Game extends KeyAdapter implements ActionListener, KeyListener {
+class Game extends KeyAdapter implements ActionListener, KeyListener {
     private Team team = Team.ONE;
     private VierGewinnt vierGewinnt = new VierGewinnt();
     private ImageIcon red = new ImageIcon(this.getClass().getResource("assets/RED.png"));
@@ -60,7 +60,10 @@ public class Game extends KeyAdapter implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
     }
     public void keyReleased(KeyEvent e) {
-        int num = Integer.parseInt(Character.toString(e.getKeyChar()))-1;
+        int num=-1;
+        try {
+            num = Integer.parseInt(Character.toString(e.getKeyChar())) - 1;
+        } catch (NumberFormatException ignore) {}
         if(num>=0&&num<=6) {
             col_buttons[num].doClick(111);
         }
@@ -109,7 +112,7 @@ public class Game extends KeyAdapter implements ActionListener, KeyListener {
         }
     }
 
-    public void initGui() {
+    void initGui() {
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLayout(new BorderLayout());
         jFrame.addKeyListener(this);
