@@ -19,19 +19,19 @@ class Game extends KeyAdapter implements ActionListener, KeyListener {
     private JButton[] col_buttons;
 
     private void switchTeam() {
-        switch(team) {
+        switch (team) {
             case ONE:
-                team=Team.TWO;
+                team = Team.TWO;
                 break;
             case TWO:
-                team=Team.ONE;
+                team = Team.ONE;
                 break;
         }
     }
 
     private void resetDialog() {
         int resp = JOptionPane.showConfirmDialog(jFrame, "Do you want to play another round?", "Another round?", JOptionPane.YES_NO_OPTION);
-        if(resp==0) {
+        if (resp == 0) {
             resetBoard();
         } else {
             System.exit(0);
@@ -43,38 +43,42 @@ class Game extends KeyAdapter implements ActionListener, KeyListener {
         bottomText.setText("Red's turn");
         team = Team.TWO;
 
-        for(int r=0;r<rows;r++) {
-            for(int c=0;c<cols;c++) {
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
                 fields[r][c].setIcon(new ImageIcon());
             }
         }
-        for(int i=0;i<7;i++) {
+        for (int i = 0; i < 7; i++) {
             col_buttons[i].setEnabled(true);
         }
     }
 
     public void actionPerformed(ActionEvent actionEvent) {
-        place(Integer.parseInt(actionEvent.getActionCommand())-1);
+        place(Integer.parseInt(actionEvent.getActionCommand()) - 1);
     }
 
     public void keyPressed(KeyEvent e) {
     }
+
     public void keyReleased(KeyEvent e) {
-        int num=-1;
+        int num = -1;
         try {
             num = Integer.parseInt(Character.toString(e.getKeyChar())) - 1;
-        } catch (NumberFormatException ignore) {}
-        if(num>=0&&num<=6) {
+        } catch (NumberFormatException ignore) {
+        }
+        if (num >= 0 && num <= cols - 1) {
             col_buttons[num].doClick(111);
         }
     }
 
-    public void keyTyped(KeyEvent e) {}
+
+    public void keyTyped(KeyEvent e) {
+    }
 
     private void place(int num) {
         int pl = vierGewinnt.place(num, team);
-        if(pl != -1) {
-            switch(team) {
+        if (pl != -1) {
+            switch (team) {
                 case ONE:
                     fields[pl][num].setIcon(red);
                     break;
@@ -82,11 +86,11 @@ class Game extends KeyAdapter implements ActionListener, KeyListener {
                     fields[pl][num].setIcon(blue);
                     break;
             }
-            if(vierGewinnt.win(num,pl)) {
-                for(int i=0;i<7;i++) {
+            if (vierGewinnt.win(num, pl)) {
+                for (int i = 0; i < 7; i++) {
                     col_buttons[i].setEnabled(false);
                 }
-                switch(team) {
+                switch (team) {
                     case ONE:
                         JOptionPane.showConfirmDialog(jFrame, "Red wins!", "Winner", JOptionPane.DEFAULT_OPTION);
                         break;
@@ -95,11 +99,11 @@ class Game extends KeyAdapter implements ActionListener, KeyListener {
                         break;
                 }
                 resetDialog();
-            } else if(vierGewinnt.isDraw()) {
+            } else if (vierGewinnt.isDraw()) {
                 JOptionPane.showConfirmDialog(jFrame, "It's a draw!", "Draw", JOptionPane.DEFAULT_OPTION);
                 resetDialog();
-            }  else {
-                switch(team) {
+            } else {
+                switch (team) {
                     case ONE:
                         bottomText.setText("Blue's turn");
                         break;
@@ -120,12 +124,12 @@ class Game extends KeyAdapter implements ActionListener, KeyListener {
 
         JPanel board = new JPanel();
         board.addKeyListener(this);
-        board.setPreferredSize(new Dimension(500,300));
-        board.setLayout(new GridLayout(rows, cols, 2,2));
+        board.setPreferredSize(new Dimension(500, 300));
+        board.setLayout(new GridLayout(rows, cols, 2, 2));
         fields = new JLabel[rows][cols];
-        for(int r=0;r<rows;r++) {
-            for(int c=0;c<cols;c++) {
-                fields[r][c] = new JLabel("",SwingConstants.CENTER);
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                fields[r][c] = new JLabel("", SwingConstants.CENTER);
                 fields[r][c].setBorder(new LineBorder(Color.BLACK));
                 board.add(fields[r][c]);
             }
@@ -134,11 +138,11 @@ class Game extends KeyAdapter implements ActionListener, KeyListener {
 
         JPanel buttonRow = new JPanel();
         buttonRow.addKeyListener(this);
-        buttonRow.setPreferredSize(new Dimension(500,25));
+        buttonRow.setPreferredSize(new Dimension(500, 25));
         buttonRow.setLayout(new GridLayout(1, cols, 2, 0));
         col_buttons = new JButton[cols];
-        for(int i=0;i<cols;i++) {
-            col_buttons[i] = new JButton(""+(i+1));
+        for (int i = 0; i < cols; i++) {
+            col_buttons[i] = new JButton("" + (i + 1));
             col_buttons[i].addActionListener(this);
             col_buttons[i].addKeyListener(this);
             buttonRow.add(col_buttons[i]);
@@ -146,7 +150,7 @@ class Game extends KeyAdapter implements ActionListener, KeyListener {
         buttonRow.setVisible(true);
 
         bottomText = new JLabel("Red's turn", SwingConstants.CENTER);
-        bottomText.setPreferredSize(new Dimension(500,25));
+        bottomText.setPreferredSize(new Dimension(500, 25));
         bottomText.setFocusable(false);
 
         jFrame.add(buttonRow, BorderLayout.NORTH);
