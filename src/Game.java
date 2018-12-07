@@ -6,14 +6,11 @@ import java.awt.event.*;
 class Game extends KeyAdapter implements ActionListener, KeyListener {
     private Team team = Team.ONE;
     private VierGewinnt vierGewinnt = new VierGewinnt();
-    private ImageIcon red = new ImageIcon(this.getClass().getResource("assets/RED.png"));
-    private ImageIcon blue = new ImageIcon(this.getClass().getResource("assets/BLUE.png"));
+    private final ImageIcon red = new ImageIcon(this.getClass().getResource("assets/RED.png"));
+    private final ImageIcon blue = new ImageIcon(this.getClass().getResource("assets/BLUE.png"));
 
 
-    private int cols = 7;
-    private int rows = 5;
-
-    private JFrame jFrame = new JFrame();
+    private final JFrame jFrame = new JFrame();
     private JLabel[][] fields;
     private JLabel bottomText;
     private JButton[] col_buttons;
@@ -43,8 +40,8 @@ class Game extends KeyAdapter implements ActionListener, KeyListener {
         bottomText.setText("Red's turn");
         team = Team.TWO;
 
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
+        for (int r = 0; r < vierGewinnt.getRows(); r++) {
+            for (int c = 0; c < vierGewinnt.getColumns(); c++) {
                 fields[r][c].setIcon(new ImageIcon());
             }
         }
@@ -66,7 +63,7 @@ class Game extends KeyAdapter implements ActionListener, KeyListener {
             num = Integer.parseInt(Character.toString(e.getKeyChar())) - 1;
         } catch (NumberFormatException ignore) {
         }
-        if (num >= 0 && num <= cols - 1) {
+        if (num >= 0 && num <= vierGewinnt.getColumns() - 1) {
             col_buttons[num].doClick(111);
         }
     }
@@ -125,10 +122,10 @@ class Game extends KeyAdapter implements ActionListener, KeyListener {
         JPanel board = new JPanel();
         board.addKeyListener(this);
         board.setPreferredSize(new Dimension(500, 300));
-        board.setLayout(new GridLayout(rows, cols, 2, 2));
-        fields = new JLabel[rows][cols];
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
+        board.setLayout(new GridLayout(vierGewinnt.getRows(), vierGewinnt.getColumns(), 2, 2));
+        fields = new JLabel[vierGewinnt.getRows()][vierGewinnt.getColumns()];
+        for (int r = 0; r < vierGewinnt.getRows(); r++) {
+            for (int c = 0; c < vierGewinnt.getColumns(); c++) {
                 fields[r][c] = new JLabel("", SwingConstants.CENTER);
                 fields[r][c].setBorder(new LineBorder(Color.BLACK));
                 board.add(fields[r][c]);
@@ -139,9 +136,9 @@ class Game extends KeyAdapter implements ActionListener, KeyListener {
         JPanel buttonRow = new JPanel();
         buttonRow.addKeyListener(this);
         buttonRow.setPreferredSize(new Dimension(500, 25));
-        buttonRow.setLayout(new GridLayout(1, cols, 2, 0));
-        col_buttons = new JButton[cols];
-        for (int i = 0; i < cols; i++) {
+        buttonRow.setLayout(new GridLayout(1, vierGewinnt.getColumns(), 2, 0));
+        col_buttons = new JButton[vierGewinnt.getColumns()];
+        for (int i = 0; i < vierGewinnt.getColumns(); i++) {
             col_buttons[i] = new JButton("" + (i + 1));
             col_buttons[i].addActionListener(this);
             col_buttons[i].addKeyListener(this);

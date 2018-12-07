@@ -1,21 +1,18 @@
-public class VierGewinnt {
-    private int columns = 7;
-    private int rows = 5;
-    private Team[][] board;
+class VierGewinnt {
+    private final int columns = 7;
+    private final int rows = 5;
+    private final Team[][] board;
     private int count=columns*rows;
 
     VierGewinnt() {
         board = new Team[columns][rows];
     }
 
-    public boolean isDraw() {
-        if(count<=0) {
-            return true;
-        }
-        return false;
+    boolean isDraw() {
+        return count<=0;
     }
 
-    public int place(int col, Team team) {
+    int place(int col, Team team) {
         if(board[col][0]!=null) {
             return -1;
         }
@@ -52,41 +49,43 @@ public class VierGewinnt {
         return true;
     }
 
-    public boolean win(int x, int y) {
+    boolean win(int x, int y) {
         for (int i=0;i<4;i++) {
             //check horizontal
             try {
                 if(areAllEqual(getBoard()[x-i][y],getBoard()[x-i+1][y],getBoard()[x-i+2][y],getBoard()[x-i+3][y])) {
                     return true;
                 }
-            } catch (IndexOutOfBoundsException e) {}
+            } catch (IndexOutOfBoundsException ignored) {}
             //check vertical
             try {
                 if(areAllEqual(getBoard()[x][y-i],getBoard()[x][y-i+1],getBoard()[x][y-i+2],getBoard()[x][y-i+3])) {
                     return true;
                 }
-            } catch (IndexOutOfBoundsException e) {}
+            } catch (IndexOutOfBoundsException ignored) {}
             try {
                 if(areAllEqual(getBoard()[x-i][y-i],getBoard()[x-i+1][y-i+1],getBoard()[x-i+2][y-i+2],getBoard()[x-i+3][y-i+3])) {
                     return true;
                 }
-            } catch (IndexOutOfBoundsException e) {}
+            } catch (IndexOutOfBoundsException ignored) {}
             try {
                 if(areAllEqual(getBoard()[x-i][y+i], getBoard()[x-i+1][y+i-1], getBoard()[x-i+2][y+i-2], getBoard()[x-i+3][y+i-3])) {
                     return true;
                 }
-            } catch (IndexOutOfBoundsException e) {}
+            } catch (IndexOutOfBoundsException ignored) {}
         }
         return false;
     }
 
-    public Team[][] getBoard() {
-        return board;
-    }
-    public int getColumns() {
-        return columns;
-    }
-    public int getRows() {
+    int getRows() {
         return rows;
     }
+    int getColumns() {
+        return columns;
+    }
+
+    private Team[][] getBoard() {
+        return board;
+    }
+
 }
