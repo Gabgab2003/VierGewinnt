@@ -31,6 +31,7 @@ class Game extends KeyAdapter implements ActionListener, KeyListener {
         if (resp == 0) {
             resetBoard();
         } else {
+            jFrame.dispose();
             System.exit(0);
         }
     }
